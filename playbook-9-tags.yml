@@ -1,0 +1,72 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates on Ubuntu
+    tags: always
+    apt:
+      update_cache: yes
+      upgrade: dist
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install updates on RedHat
+    tags: always
+    dnf:
+      update_cache: yes
+      update_only: yes
+    when: ansible_distribution == "RedHat"
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php on Ubuntu
+    tags: apache2,apache,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install httpd and php on RedHat
+    tags: httpd,apache,RedHat
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb on Ubuntu
+    tags: mariadb-server,db,ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install mariadb on RedHat
+    tags: mariadb,db,RedHat
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba on file server
+    tags: samba
+    package:
+      name: samba
+      state: latest
