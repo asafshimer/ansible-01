@@ -16,3 +16,4 @@ ssh -i ~/.ssh/keyname ip - ssh with a specific key
 eval $(ssh-agent) - start an agent to cache key passphrase
 ssh-add ~/.ssh/keyname - add key to agent
 cat /etc/os-release - see os
+systemctl status mariadb - check status
