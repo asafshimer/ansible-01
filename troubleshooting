@@ -1,0 +1,1 @@
+(ubuntu)ssh ip -> Unit ssh.service could not be found. -> sudo apt install openssh-server

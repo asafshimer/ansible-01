@@ -1,0 +1,17 @@
+/etc/ssh - ssh location
+~/.ssh - ssh keys and hosts location
+ssh -V - check for ssh
+which ssh - check for ssh
+ssh ip - connect remotely via ssh
+sudo apt install openssh-server
+sudo service ssh status - check ssh status   
+sudo service ssh start - start ssh
+sudo service ssh restart - restart ssh
+sudo systemctl enable ssh - enable ssh to run on boot
+sudo netstat -ltnp | grep sshd - check on which port the openssh is listening
+ssh-keygen -t(for type) ed25519 -C(for comment) "text" - generate a key paor
+ssh-copy-id -i(for inout) ~/.ssh/public-key server-ip-address - copy the key to server
+~/.ssh/authorized_keys - location of keys on servers
+ssh -i ~/.ssh/keyname ip - ssh with a specific key
+eval $(ssh-agent) - start an agent to cache key passphrase
+ssh-add ~/.ssh/keyname - add key to agent

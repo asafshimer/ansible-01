@@ -1,0 +1,2 @@
+systemctl status sshd - check for ssh status
+systemctl sshd start - start ssh

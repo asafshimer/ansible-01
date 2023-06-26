@@ -1,0 +1,16 @@
+https://git-scm.com/docs - git commands
+which git - check for git
+sudo apt install git - install git
+git init - initialize git repo
+ssh-keygen -t ed25519 -C "your_email@example.com" - create key and add to github
+eval "$(ssh-agent -s)" - start ssh agent in the background
+ssh-add ~/.ssh/keyname - add key to agent
+git clone url - clone repo to local machine
+git config --global user.name/email - set git config
+git config --list - see config file
+~/.gitconfig - file location
+git remote add origin repo-url - associate the name origin with the repo url
+git remote -v - verify remote
+git remote set-url - change a remote url
+git branch (-d for delete) - see current branch
+git checkout (-b for new branch) branchname - change branch
