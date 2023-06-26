@@ -3,3 +3,6 @@ connect to each server via ssh - ssh ip(for each server)
 create a general ssh key pair (with passphrase) -> copy the key to each server
 create a specific ssh key pair for ansible (without a passphrase for automation!!!) -> copy eky to each server
 create git repo for project and set it up - go to git
+-------------------------------------------------------
+create an inventory file with ip addresses of servers you manage
+
