@@ -1,1 +1,5 @@
 ansible --version - check for ansible
+ansible all --key-file ~/.ssh/ansible-key -i(input) inventoryfile -m(module) ping - ping to servers 
+cat /etc/ansible/ansible.cfg - see original cfg file
+ansible all --list-host - get inventory list
+ansible all -m gather_facts (--limit ip) - get info

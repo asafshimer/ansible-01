@@ -5,4 +5,4 @@ create a specific ssh key pair for ansible (without a passphrase for automation!
 create git repo for project and set it up - go to git
 -------------------------------------------------------
 create an inventory file with ip addresses of servers you manage
-
+create an ansible.cfg file to make a defaultive command aditions
