@@ -3,3 +3,5 @@ ansible all --key-file ~/.ssh/ansible-key -i(input) inventoryfile -m(module) pin
 cat /etc/ansible/ansible.cfg - see original cfg file
 ansible all --list-host - get inventory list
 ansible all -m gather_facts (--limit ip) - get info
+ansible all -m(module) apt -a(argument) update_cache=true --become --ask-become-pass - update ubuntu servers
+ansible-playbook - run a playbook
