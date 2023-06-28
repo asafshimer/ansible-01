@@ -1,0 +1,103 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install updates on ubuntu
+    tags: always
+    apt:
+      update_cache: yes
+      upgrade: dist
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install updates on redhat
+    tags: always
+    dnf:
+      update_cache: yes
+      update_only: yes
+    when: ansible_distribution == "RedHat"
+
+##################################################
+
+- hosts: workstations
+  become: true
+  tasks:
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/1.5.1/terraform_1.5.1_darwin_amd64.zip
+      dest: /usr/local/bin
+      remote-src: yes
+      mode: 0755
+      owner: root
+      group: root
+
+  ################################################
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php on ubuntu
+    tags: apache2,apache,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install httpd and php on redhat
+    tags: httpd,apache,RedHat
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+  - name: copy default_site.html from local to servers
+    tags: apache2,httpd,apache
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+##############################################
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb-server on ubuntu
+    tags: mariadb-server,db,ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install mariadb on redhat
+    tags: mariadb,db,RedHat
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+####################################################
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba on file server
+    tags: samba
+    package:
+      name: samba
+      state: latest
