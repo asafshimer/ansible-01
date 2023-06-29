@@ -1,0 +1,13 @@
+- name: install mariadb-server on ubuntu db servers
+  tags: mariadb-server,db,ubuntu
+  apt:
+    name: mariadb-server
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: install mariadb on RedHat db servers
+  tags: mariadb,db,RedHat
+  dnf:
+    name: mariadb
+    state: latest
+  when: ansible_distribution == "RedHat"

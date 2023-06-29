@@ -1,0 +1,43 @@
+---
+
+### update repositories ###
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repo index (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+  - name: update repo index (RedHat)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "RedHat"
+
+### roles ###
+
+- hosts: all
+  become: true
+  roles:
+    - base
+  
+- hosts: web_servers
+  become: true
+  roles:
+    - web_servers
+
+- hosts: db_servers
+  become: true
+  roles:
+    - db_servers
+
+- hosts: file_servers
+  become: true
+  roles:
+    - file_servers
