@@ -3,3 +3,4 @@ systemctl sshd start - start ssh
 cat /etc/os-release - see os
 systemctl status httpd - check status
 sudo systemctl start httpd -> sudo firewall-cmd --add-port=80/tcp - start httpd
+/etc/httpd/conf/httpd.conf - conf file location

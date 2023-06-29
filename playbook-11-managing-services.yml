@@ -1,0 +1,122 @@
+---
+
+### install updates ###
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repo cache ubuntu
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+  - name: update repo cache RedHat
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "RedHat"
+
+### add ansible key to user1 authorized_key file ###
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: add ssh ansible key for user1
+    tags: always
+    authorized_key:
+      user: user1
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG3XCyF8qOOO38MhqXRzd7tZX+IsJH2AG2+yUuOmf8vi ansible-key"
+
+### web servers ###
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php on ubuntu
+    tags: apache2,apache,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install httpd and php on RedHat
+    tags: httpd,apache,RedHat
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+  - name: start httpd (RedHat)
+    tags: httpd,apache,RedHat
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "RedHat"
+
+  - name: change email address for admin on RedHat server
+    tags: httpd,apache,RedHat
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin shimerasaf@gmail.com
+    when: ansible_distribution == "RedHat"
+    register: httpd
+
+  - name: restart httpd (RedHat)
+    tags: httpd,apache,RedHat
+    service:
+      name: httpd
+      state: restarted
+    when: httpd.changed
+
+  - name: copy html file from local to web servers
+    tags: apache2,httpd,apache
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+### db servers ###
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb-server on ubuntu
+    tags: mariadb-servers,db,ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install mariadb on RedHat
+    tags: mariadb,db,RedHat
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+### file servers ###
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba on file servers
+    tags: samba
+    package:
+      name: samba
+      state: latest
