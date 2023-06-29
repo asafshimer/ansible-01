@@ -22,3 +22,6 @@ cat path | grep text - get line with text
 cat /etc/passwd - see last users that were added
 /etc/sudoers.d/user1 - path to sudoers file
 ssh -i ~/.ssh/ansible user1@ip - login as user1
+/etc/ssh/sshd_config - ssh config file
+filename.j2 - set file to be a template
+scp ip:path filename - copy from server and name the file
