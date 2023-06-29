@@ -1,48 +1,36 @@
-### install apache and php on ubuntu ###
+### install apache2 on ubuntu and httpd on RedHat and php on both ###
 
-- name: install apache2 and php on ubuntu
-  tags: apache2,apache,ubuntu
-  apt:
+- name: install apache2 on ubuntu and httpd on RedHat and php on both
+  tags: apache2,httpd,apache,php
+  package:
     name:
-      - apache2
-      - libapache2-mod-php
+      - "{{ apache_package_name }}"
+      - "{{ php_package_name }}"
     state: latest
-  when: ansible_distribution == "Ubuntu"
 
-### install httpd and php on RedHat ###
+### start and enable apache service ###
 
-- name: install httpd and php on RedHat
-  tags: httpd,apache,RedHat
-  dnf:
-    name:
-      - httpd
-      - php
-    state: latest
-  when: ansible_distribution == "RedHat"
-
-  ### start and enable httpd on RedHat ###
-
-- name: start and enable httpd on RedHat
-  tags: httpd,apache,RedHat
+- name: start and enable apache service
+  tags: httpd,apache
   service:
-    name: httpd
+    name: "{{ apache_service }}"
     state: started
     enabled: yes
+
+### change email address for RedHat admin ###
+
+- name: change email address for RedHat admin
+  tags: apache2,httpd,apache
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin shimerasaf111@gmail.com
   when: ansible_distribution == "RedHat"
-  register: httpd
+  notify: restart_apache
+  
+### copy html file on servers ###
 
-### restart httpd on RedHat ###
-
-- name: restart httpd on RedHat
-  tags: httpd,apache,RedHat
-  service:
-    name: httpd
-    state: restarted
-  when: httpd.changed
-
-### copy html file from local to web servers ###
-
-- name: copy html file from local to web servers
+- name: copy html file
   tags: apache2,httpd,apache
   copy:
     src: ~/Desktop/ansible/learn-linux-tv/ansible-01/files/default_site.html
